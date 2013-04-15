@@ -74,6 +74,10 @@
  #include <ft2build.h>
  #include FT_FREETYPE_H
  #undef SIZEOF
+#elif JUCE_ANDROID
+ #if JUCE_USE_FREETYPE_ANDROID
+  #include "native/freetype/FreeTypeAmalgam.h"
+ #endif
 #endif
 
 #if (JUCE_MAC || JUCE_IOS) && USE_COREGRAPHICS_RENDERING && JUCE_USE_COREIMAGE_LOADER
