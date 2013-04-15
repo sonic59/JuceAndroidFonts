@@ -447,47 +447,12 @@ StringArray Font::findAllTypefaceStyles (const String& family)
     return FTTypefaceList::getInstance()->findAllTypefaceStyles (family);
 }
 
-struct DefaultFontNames
-{
-    DefaultFontNames()
-        : defaultSans  ("sans"),
-          defaultSerif ("serif"),
-          defaultFixed ("monospace"),
-          defaultFallback ("sans")
-    {
-    }
-
-    String defaultSans, defaultSerif, defaultFixed, defaultFallback;
-};
-
-Typeface::Ptr Font::getDefaultTypefaceForFont (const Font& font)
-{
-    static DefaultFontNames defaultNames;
-
-    String faceName (font.getTypefaceName());
-
-    if (faceName == Font::getDefaultSansSerifFontName())       faceName = defaultNames.defaultSans;
-    else if (faceName == Font::getDefaultSerifFontName())      faceName = defaultNames.defaultSerif;
-    else if (faceName == Font::getDefaultMonospacedFontName()) faceName = defaultNames.defaultFixed;
-
-    Font f (font);
-    f.setTypefaceName (faceName);
-    return Typeface::createSystemTypefaceFor (f);
-}
-
-const float referenceFontSize = 256.0f;
-const float referenceFontToUnits = 1.0f / referenceFontSize;
-
 //==============================================================================
 Typeface::Ptr Typeface::createSystemTypefaceFor (const Font& font)
 {
     return new FreeTypeTypeface (font);
 }
 
-bool TextLayout::createNativeLayout (const AttributedString&)
-{
-    return false;
-}
 #else
 
 //==============================================================================
@@ -518,37 +483,6 @@ StringArray Font::findAllTypefaceStyles (const String& family)
 
     return results;
 }
-
-struct DefaultFontNames
-{
-    DefaultFontNames()
-        : defaultSans  ("sans"),
-          defaultSerif ("serif"),
-          defaultFixed ("monospace"),
-          defaultFallback ("sans")
-    {
-    }
-
-    String defaultSans, defaultSerif, defaultFixed, defaultFallback;
-};
-
-Typeface::Ptr Font::getDefaultTypefaceForFont (const Font& font)
-{
-    static DefaultFontNames defaultNames;
-
-    String faceName (font.getTypefaceName());
-
-    if (faceName == Font::getDefaultSansSerifFontName())       faceName = defaultNames.defaultSans;
-    else if (faceName == Font::getDefaultSerifFontName())      faceName = defaultNames.defaultSerif;
-    else if (faceName == Font::getDefaultMonospacedFontName()) faceName = defaultNames.defaultFixed;
-
-    Font f (font);
-    f.setTypefaceName (faceName);
-    return Typeface::createSystemTypefaceFor (f);
-}
-
-const float referenceFontSize = 256.0f;
-const float referenceFontToUnits = 1.0f / referenceFontSize;
 
 //==============================================================================
 class AndroidTypeface   : public Typeface
@@ -737,9 +671,40 @@ Typeface::Ptr Typeface::createSystemTypefaceFor (const Font& font)
     return new AndroidTypeface (font);
 }
 
+#endif
+
+struct DefaultFontNames
+{
+    DefaultFontNames()
+        : defaultSans  ("sans"),
+          defaultSerif ("serif"),
+          defaultFixed ("monospace"),
+          defaultFallback ("sans")
+    {
+    }
+
+    String defaultSans, defaultSerif, defaultFixed, defaultFallback;
+};
+
+Typeface::Ptr Font::getDefaultTypefaceForFont (const Font& font)
+{
+    static DefaultFontNames defaultNames;
+
+    String faceName (font.getTypefaceName());
+
+    if (faceName == Font::getDefaultSansSerifFontName())       faceName = defaultNames.defaultSans;
+    else if (faceName == Font::getDefaultSerifFontName())      faceName = defaultNames.defaultSerif;
+    else if (faceName == Font::getDefaultMonospacedFontName()) faceName = defaultNames.defaultFixed;
+
+    Font f (font);
+    f.setTypefaceName (faceName);
+    return Typeface::createSystemTypefaceFor (f);
+}
+
+const float referenceFontSize = 256.0f;
+const float referenceFontToUnits = 1.0f / referenceFontSize;
+
 bool TextLayout::createNativeLayout (const AttributedString&)
 {
     return false;
 }
-
-#endif
