@@ -1,0 +1,3 @@
+Android has poor font support. There is no way to install OS wide fonts. There is no font enumeration API. It is not possible to iterate a Path to get glyph outlines.
+
+By using FreeType we can completely bypass the Android font system resulting in better support for fonts.
